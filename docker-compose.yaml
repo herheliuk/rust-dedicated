@@ -1,0 +1,139 @@
+services:
+  server:
+    image: ghcr.io/herheliuk/rust-dedicated-carbon:latest
+    container_name: $SERVER_CONTAINER_NAME
+
+    # https://wiki.facepunch.com/rust/dns-records
+
+    command: >
+      +server.hostname "CHANGE_ME"
+
+      +server.headerimage "https://CHANGE.ME/server-assets/header_512x256.png"
+      +server.logoimage "https://CHANGE.ME/server-assets/logo_256x256.png"
+
+      +server.description 'CHANGE_ME\n\nCHANGE_ME'
+      +server.url "https://CHANGE.ME"
+
+      +server.tags "monthly,vanilla"
+      +server.premium "false"
+
+      +server.favoritesEndpoint "CHANGE.ME"
+
+      +server.maxplayers 100
+
+      +server.worldsize 4000
+
+      +server.printReportsToConsole true
+
+    environment:
+      ADMIN_CONTAINER_NAME: $ADMIN_CONTAINER_NAME
+      
+      SERVER_PORT: $SERVER_PORT
+      QUERY_PORT: $QUERY_PORT
+      APP_PORT: $APP_PORT
+
+      WIPE_SERVER_SAVE_FILES: 1 # SET ZERO TO KEEP BLUEPRINTS
+
+    volumes:
+      - server_build:/home/steam/rustserver/
+      
+      - server_data:/home/steam/rustserver/server/
+      
+      - carbon:/home/steam/rustserver/carbon/
+      - harmony_mods:/home/steam/rustserver/HarmonyMods/
+      - harmony_data:/home/steam/rustserver/HarmonyMods_Data/
+
+    ports:
+      - $SERVER_PORT:$SERVER_PORT/udp
+      - $QUERY_PORT:$QUERY_PORT/udp
+      - $APP_PORT:$APP_PORT
+
+    restart: unless-stopped
+
+  admin:
+    image: ghcr.io/herheliuk/rust-dedicated-admin:latest
+    container_name: $ADMIN_CONTAINER_NAME
+
+    environment:
+      SERVER_CONTAINER_NAME: $SERVER_CONTAINER_NAME
+
+      WHITE_LISTED_GOOGLE_OPEN_IDS: $WHITE_LISTED_GOOGLE_OPEN_IDS
+
+      GOOGLE_OAUTH_CLIENT_ID: $GOOGLE_OAUTH_CLIENT_ID
+      GOOGLE_OAUTH_CLIENT_SECRET: $GOOGLE_OAUTH_CLIENT_SECRET
+    
+    volumes:
+      - server_data:/home/user/server/
+      - server_data_backups:/home/user/server_data_backups/
+    
+    restart: unless-stopped
+  
+  grafana:
+    image: grafana/grafana:latest
+    
+    container_name: rust-grafana
+    
+    volumes:
+      - grafana_data:/var/lib/grafana
+    
+    restart: unless-stopped
+
+  metrics:
+    image: influxdb:1.8-alpine
+    
+    container_name: rust-metrics
+    
+    volumes:
+      - metrics:/var/lib/influxdb
+    
+    environment:
+      INFLUXDB_DATA_MAX_VALUES_PER_TAG: 0
+      INFLUXDB_DATA_MAX_SERIES_PER_DATABASE: 0
+      INFLUXDB_HTTP_AUTH_ENABLED: false
+
+      INFLUXDB_DB: "db01"
+
+      INFLUXDB_USER: "user"
+      INFLUXDB_USER_PASSWORD: $INFLUXDB_USER_PASSWORD
+    
+    logging:
+      options:
+        max-size: "50m"
+    
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:latest
+
+    container_name: caddy
+    
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./website_files:/website_files
+      
+      - caddy_data:/data
+      - caddy_config:/config
+    
+    restart: unless-stopped
+
+volumes:
+  server_build:
+
+  server_data:
+  server_data_backups:
+
+  carbon:
+  harmony_mods:
+  harmony_data:
+
+  grafana_data:
+
+  metrics:
+
+  caddy_data:
+  caddy_config:

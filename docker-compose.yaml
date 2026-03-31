@@ -17,7 +17,7 @@ services:
       +server.tags "monthly,vanilla"
       +server.premium "false"
 
-      +server.favoritesEndpoint "CHANGE.ME"
+      +server.favoritesEndpoint "CHANGE_ME.CHANGE.ME"
 
       +server.maxplayers 100
 

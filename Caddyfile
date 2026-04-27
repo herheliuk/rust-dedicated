@@ -1,0 +1,38 @@
+CHANGE.ME {
+  encode
+
+  redir /discord https://discord.gg/CHANGE_ME
+
+  root * /website_files/
+  file_server
+
+  handle_errors {
+    redir * https://discord.gg/CHANGE_ME
+  }
+
+  #handle {
+  #  try_files {path} /index.html
+  #  file_server
+  #}
+}
+
+dash.CHANGE.ME {
+  encode
+
+  reverse_proxy rust-grafana:3000
+}
+
+rcon.CHANGE.ME {
+  encode
+
+  respond /docker/* 403
+  respond /rcon/* 403
+
+  reverse_proxy rust-admin:8000
+}
+
+influx.CHANGE.ME {
+  encode
+
+  reverse_proxy rust-metrics:8086
+}

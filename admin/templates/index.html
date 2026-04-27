@@ -270,7 +270,17 @@ document.addEventListener("keydown", e=>{
         if (document.activeElement !== commandInput)
             commandInput.focus();
     }
-});
+})
+
+document.addEventListener("paste", e => {
+    if (document.activeElement !== commandInput) {
+        commandInput.focus()
+    }
+
+    const text = (e.clipboardData || window.clipboardData).getData("text")
+    commandInput.value += text
+    e.preventDefault()
+})
 
 let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0, touchStartTime = 0, isSwiping = false, historyBrowsing = false;
 const minSwipeDistance = 30, maxTapDistance = 10, maxTapTime = 200;

@@ -118,26 +118,23 @@ async def restart_docker():
     await restart()
     return Response(status_code=201)
 
-@app.post("/rcon/post")
-async def rcon_post(request: Request):
-    body = await request.json()
-    message = body.get("message")
-    if not message:
-        raise HTTPException(status_code=400, detail="Missing message")
-
-    responses = []
-
-    rcon = await get_rcon().__aenter__()
-
+@app.websocket("/rcon/ws")
+async def rcon_ws (websocket: WebSocket):
     try:
-        await send_message(rcon, message)
+        async with get_rcon() as rcon:
+            await websocket.accept()
+            
+            async def web_to_rcon():
+                while True:
+                    message = await websocket.receive_text()
+                    await send_message(rcon, message)
 
-        while True:
-            try:
-                msg = await asyncio.wait_for(read_message(rcon), timeout=1)
-                responses.append(msg)
-            except asyncio.TimeoutError:
-                return {"responses": responses}
+            async def rcon_to_web():
+                while True:
+                    message = await read_message(rcon)
+                    await websocket.send_text(message)
 
-    finally:
-        asyncio.create_task(rcon.close())
+            await asyncio.gather(web_to_rcon(), rcon_to_web())
+    except:
+        if websocket.client_state != WebSocketState.DISCONNECTED:
+            await websocket.close()

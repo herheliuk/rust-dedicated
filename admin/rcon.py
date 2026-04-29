@@ -7,9 +7,7 @@ from asyncio import (
     gather as asyncio_gather,
     run as asyncio_run,
     to_thread as asyncio_to_thread,
-    sleep as asyncio_sleep,
-    TimeoutError as asyncio_TimeoutError,
-    wait_for as asyncio_wait_for
+    sleep as asyncio_sleep
 )
 from readline import read_history_file, write_history_file
 from os import getenv

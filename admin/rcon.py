@@ -6,10 +6,14 @@ from json import loads as json_loads, dumps as json_dumps
 from asyncio import (
     gather as asyncio_gather,
     run as asyncio_run,
-    to_thread as asyncio_to_thread
+    to_thread as asyncio_to_thread,
+    sleep as asyncio_sleep,
+    TimeoutError as asyncio_TimeoutError,
+    wait_for as asyncio_wait_for
 )
 from readline import read_history_file, write_history_file
 from os import getenv
+from sys import argv
 
 HISTORY_FILE = ".rcon_history"
 try:
@@ -18,11 +22,16 @@ except FileNotFoundError:
     pass
 
 
-def get_rcon():
-    return websockets_connect(
-        f"ws://{getenv("SERVER_CONTAINER_NAME")}:28016/ZxAKvf4zh7U3P1Pxxv70qjsRhHA3TK",
-        ping_timeout=None
-    )
+async def get_rcon():
+    while True:
+        try:
+            return websockets_connect(
+                f"ws://{getenv('SERVER_CONTAINER_NAME')}:28016/ZxAKvf4zh7U3P1Pxxv70qjsRhHA3TK",
+                ping_timeout=None
+            )
+        except Exception:
+            await asyncio_sleep(1)
+
 
 async def send_message(rcon, message):
     return await rcon.send(json_dumps({
@@ -37,21 +46,26 @@ async def read_message(rcon):
 
 
 async def main():
-    async with get_rcon() as rcon:
-        async def send_input(rcon):
-            while True:
-                message = await asyncio_to_thread(input, '> ')
-                await send_message(rcon, message)
-        
-        async def listen(rcon):
-            while True:
-                message = await read_message(rcon)
-                print(f'\r{message}\n> ', end="", flush=True)
-        
-        await asyncio_gather(
-            send_input(rcon),
-            listen(rcon)
-        )
+    rcon = await get_rcon()
+    async with rcon as rcon:
+        if len(argv) > 1:
+            command = " ".join(argv[1:])
+            await send_message(rcon, command)
+        else:
+            async def send_input():
+                while True:
+                    message = await asyncio_to_thread(input, '> ')
+                    await send_message(rcon, message)
+
+            async def listen():
+                while True:
+                    message = await read_message(rcon)
+                    print(f'\r{message}\n> ', end="", flush=True)
+
+            await asyncio_gather(
+                send_input(),
+                listen()
+            )
 
 if __name__ == "__main__":
     try:

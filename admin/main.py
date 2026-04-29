@@ -59,7 +59,8 @@ async def rcon_ws (websocket: WebSocket):
         return
 
     try:
-        async with get_rcon() as rcon:
+        rcon = await get_rcon()
+        async with rcon as rcon:
             await websocket.accept()
             
             async def web_to_rcon():
@@ -121,7 +122,8 @@ async def restart_docker():
 @app.websocket("/rcon/ws")
 async def rcon_ws (websocket: WebSocket):
     try:
-        async with get_rcon() as rcon:
+        rcon = await get_rcon()
+        async with rcon as rcon:
             await websocket.accept()
             
             async def web_to_rcon():

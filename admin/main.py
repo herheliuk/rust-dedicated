@@ -117,7 +117,7 @@ async def logout(request: Request):
 async def restart_docker():
     rcon = await get_rcon()
     async with rcon as rcon:
-        await send_message(rcon, f'restart 0')
+        await send_message(rcon, 'restart 0')
     return Response(status_code=201)
 
 @app.websocket("/rcon/ws")

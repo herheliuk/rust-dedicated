@@ -17,7 +17,6 @@ from secrets import token_urlsafe
 from json import loads as json_loads
 
 from rcon import get_rcon, send_message, read_message
-from restart import restart
 
 app = FastAPI(openapi_url=None)
 
@@ -116,7 +115,9 @@ async def logout(request: Request):
 
 @app.post("/docker/restart")
 async def restart_docker():
-    await restart()
+    rcon = await get_rcon()
+    async with rcon as rcon:
+        await send_message(rcon, f'restart 0')
     return Response(status_code=201)
 
 @app.websocket("/rcon/ws")

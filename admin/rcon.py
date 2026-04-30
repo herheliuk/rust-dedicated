@@ -47,8 +47,9 @@ async def main():
     rcon = await get_rcon()
     async with rcon as rcon:
         if len(argv) > 1:
-            command = " ".join(argv[1:])
-            await send_message(rcon, command)
+            commands = " ".join(argv[1:])
+            for command in commands.split(";"):
+                await send_message(rcon, command)
         else:
             async def send_input():
                 while True:

@@ -2,7 +2,7 @@
 
 import shutil
 
-from restart import restart, asyncio_run
+from rcon import get_rcon, send_message, asyncio_run
 from pathlib import Path
 
 SERVER_SEED_FILE = Path("/home/user/server/server.seed")
@@ -18,7 +18,9 @@ def delete_backups_folder():
 async def wipe(delay_in_seconds: str = ''):
     SERVER_SEED_FILE.unlink(missing_ok=True)
     delete_backups_folder()
-    await restart(delay_in_seconds)
+    rcon = await get_rcon()
+    async with rcon as rcon:
+        await send_message(rcon, f'restart {delay_in_seconds}')
 
 if __name__ == "__main__":
     from argparse import ArgumentParser

@@ -17,7 +17,8 @@ async def main():
     last_handled = defaultdict(lambda: 0)
     debounce_time = 0.5  # seconds
 
-    async with get_rcon() as rcon:
+    rcon = await get_rcon()
+    async with rcon as rcon:
         while True:
             for event in inotify.read():
                 now = time.time()

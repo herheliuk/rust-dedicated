@@ -30,16 +30,17 @@ else
   fi
 fi
 
+# App '258550' state is 0x6 after update job.
+rm /home/steam/rustserver/steamapps
+
 # Try to Update
 
-set +e
 /home/steam/steamcmd/steamcmd.sh \
   +force_install_dir "$(pwd)" \
   +login anonymous \
-  +app_update 258550 \
+  +app_update 258550 validate \
   +quit
-set -e
-
+  
 # Run
 
 trap "curl -sS -X POST http://$ADMIN_CONTAINER_NAME:8000/docker/restart" SIGTERM SIGINT

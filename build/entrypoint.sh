@@ -31,7 +31,7 @@ else
 fi
 
 # App '258550' state is 0x6 after update job.
-rm /home/steam/rustserver/steamapps
+rm -rf /home/steam/rustserver/steamapps
 
 # Try to Update
 

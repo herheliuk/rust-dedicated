@@ -14,8 +14,6 @@ services:
       +server.description 'CHANGE_ME\n\nCHANGE_ME'
       +server.url "https://CHANGE.ME"
 
-      +server.ping_region_code_override ""
-
       +server.tags "monthly,vanilla"
       +server.premium "false"
 
@@ -26,6 +24,8 @@ services:
       +server.worldsize 4000
 
       +server.printReportsToConsole true
+
+    # +server.ping_region_code_override ""
 
     environment:
       ADMIN_CONTAINER_NAME: $ADMIN_CONTAINER_NAME

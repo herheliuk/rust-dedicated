@@ -30,7 +30,7 @@ else
   fi
 fi
 
-# App '258550' state is 0x6 after update job.
+# Error! App '258550' state is 0x6 after update job.
 rm -rf steamapps
 
 # Try to Update

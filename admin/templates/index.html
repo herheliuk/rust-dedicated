@@ -260,6 +260,23 @@ commandInput.addEventListener("keydown", e => {
     }
 });
 
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp" && document.activeElement !== commandInput) {
+        e.preventDefault();
+        commandInput.focus();
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    const isSelectAll = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a";
+
+    if (isSelectAll) {
+        e.preventDefault();
+        commandInput.focus();
+        commandInput.select();
+    }
+});
+
 document.addEventListener("keydown", e=>{
     if (
         e.key.length === 1 &&
@@ -274,13 +291,26 @@ document.addEventListener("keydown", e=>{
 
 document.addEventListener("paste", e => {
     if (document.activeElement !== commandInput) {
-        commandInput.focus()
+        commandInput.focus();
     }
 
-    const text = (e.clipboardData || window.clipboardData).getData("text")
-    commandInput.value += text
-    e.preventDefault()
-})
+    const text = (e.clipboardData || window.clipboardData).getData("text");
+
+    const start = commandInput.selectionStart;
+    const end = commandInput.selectionEnd;
+
+    const value = commandInput.value;
+
+    commandInput.value =
+        value.slice(0, start) +
+        text +
+        value.slice(end);
+
+    const cursorPos = start + text.length;
+    commandInput.setSelectionRange(cursorPos, cursorPos);
+
+    e.preventDefault();
+});
 
 let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0, touchStartTime = 0, isSwiping = false, historyBrowsing = false;
 const minSwipeDistance = 30, maxTapDistance = 10, maxTapTime = 200;

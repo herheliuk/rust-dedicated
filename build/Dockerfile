@@ -6,7 +6,8 @@ LABEL org.opencontainers.image.licenses="MIT"
 
 RUN mkdir -p /home/steam/rustserver/server/ \
              /home/steam/rustserver/HarmonyMods/ \
-             /home/steam/rustserver/HarmonyMods_Data/
+             /home/steam/rustserver/HarmonyMods_Data/ \
+             /home/steam/rustserver/steamapps/
 
 WORKDIR /home/steam/rustserver/
 

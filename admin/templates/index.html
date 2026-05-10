@@ -317,36 +317,38 @@ const minSwipeDistance = 30, maxTapDistance = 10, maxTapTime = 200;
 
 commandInput.addEventListener("touchstart", (e) => {
     if (e.touches.length !== 1) return;
+
     const touch = e.touches[0];
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
     touchStartTime = Date.now();
     isSwiping = false;
+
     if (!historyBrowsing) pendingInput = commandInput.value;
-    if (document.activeElement === commandInput) e.preventDefault();
-}, { passive: false });
+}, { passive: true });
 
 commandInput.addEventListener("touchmove", (e) => {
     if (e.touches.length !== 1) return;
+
     const touch = e.touches[0];
     touchEndX = touch.clientX;
     touchEndY = touch.clientY;
+
     const deltaX = touchStartX - touchEndX;
     const deltaY = touchStartY - touchEndY;
+
     if (!isSwiping && Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > minSwipeDistance) {
         isSwiping = true;
         historyBrowsing = true;
     }
-    if (isSwiping) e.preventDefault();
+
+    if (isSwiping) {
+        e.preventDefault();
+    }
 });
 
 commandInput.addEventListener("touchend", () => {
     const deltaY = touchStartY - touchEndY;
-    const touchDuration = Date.now() - touchStartTime;
-
-    if (Math.abs(touchStartX - touchEndX) < maxTapDistance && Math.abs(deltaY) < maxTapDistance && touchDuration < maxTapTime) {
-        commandInput.focus();
-    }
 
     if (!isSwiping) return;
 

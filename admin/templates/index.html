@@ -397,6 +397,13 @@ document.addEventListener("keydown", (e) => {
         clearConsole();
     }
 });
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        const backBtn = document.getElementById("back-to-original_page");
+        if (backBtn) backBtn.click();
+    }
+});
 </script>
 </body>
 </html>

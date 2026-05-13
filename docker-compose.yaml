@@ -35,9 +35,6 @@ services:
       WIPE_SERVER_SAVE_FILES: 1 # SET ZERO TO KEEP BLUEPRINTS
 
     volumes:
-      - rust_server_build:/home/steam/rustserver/
-
-      # for running multiple servers
       - new_server_build:/home/steam/new_version
       
       - server_data:/home/steam/rustserver/server/
@@ -130,8 +127,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  rust_server_build:
-
   new_server_build:
   # for running multiple servers; docker volume create new_server_build
     #external: true

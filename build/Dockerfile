@@ -4,12 +4,13 @@ LABEL org.opencontainers.image.source="https://github.com/herheliuk/rust-dedicat
 LABEL org.opencontainers.image.authors="Andrii Herheliuk <andrii@herheliuk.com>"
 LABEL org.opencontainers.image.licenses="MIT"
 
-RUN mkdir -p /home/steam/rustserver/server/ \
-             /home/steam/rustserver/HarmonyMods/ \
-             /home/steam/rustserver/HarmonyMods_Data/ \
-             /home/steam/rustserver/steamapps/
+RUN mkdir -p /home/steam/rustserver/server \
+             /home/steam/rustserver/HarmonyMods \
+             /home/steam/rustserver/HarmonyMods_Data \
+             /home/steam/rustserver/steamapps \
+             /home/steam/rustserver/new_version
 
-WORKDIR /home/steam/rustserver/
+WORKDIR /home/steam/rustserver
 
 RUN curl -fL https://github.com/CarbonCommunity/Carbon/releases/download/production_build/Carbon.Linux.Release.tar.gz \
     | tar -xz

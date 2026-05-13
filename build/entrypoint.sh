@@ -40,9 +40,6 @@ UPDATE_LOCK_FILE="updating"
 if [ ! -f "$UPDATE_LOCK_FILE" ]; then
   touch "$UPDATE_LOCK_FILE"
 
-  # Error! App '258550' state is 0x6 after update job.
-  rm -rf steamapps/*
-
   # Try to Update
   /home/steam/steamcmd/steamcmd.sh \
     +force_install_dir "$(pwd)" \
@@ -50,16 +47,23 @@ if [ ! -f "$UPDATE_LOCK_FILE" ]; then
     +app_update 258550 validate \
     +quit
 
+  # Error! App '258550' state is 0x6 after update job.
+  rm -rf steamapps/*
+
   cp -a . "$ORIGINAL_DIR"
 
   rm -f "$UPDATE_LOCK_FILE"
 else
+  echo "Waiting for the other container to download the update..."
+
   while [ -f "$UPDATE_LOCK_FILE" ]; do
     sleep 1
   done
 
   cp -a . "$ORIGINAL_DIR"
 fi
+
+cd "$ORIGINAL_DIR"
 
 # Run
 

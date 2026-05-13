@@ -36,6 +36,9 @@ services:
 
     volumes:
       - rust_server_build:/home/steam/rustserver/
+
+      # for running multiple servers
+      - new_server_build:/home/steam/new_version
       
       - server_data:/home/steam/rustserver/server/
       
@@ -128,6 +131,10 @@ services:
 
 volumes:
   rust_server_build:
+
+  new_server_build:
+  # for running multiple servers
+    #external: true
 
   server_data:
   server_data_backups:

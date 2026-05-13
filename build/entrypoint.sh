@@ -30,17 +30,37 @@ else
   fi
 fi
 
-# Error! App '258550' state is 0x6 after update job.
-rm -rf steamapps/*
+ORIGINAL_DIR="$(pwd)"
 
-# Try to Update
+mkdir -p ../new_version
+cd ../new_version
 
-/home/steam/steamcmd/steamcmd.sh \
-  +force_install_dir "$(pwd)" \
-  +login anonymous \
-  +app_update 258550 validate \
-  +quit
-  
+UPDATE_LOCK_FILE="updating"
+
+if [ ! -f "$UPDATE_LOCK_FILE" ]; then
+  touch "$UPDATE_LOCK_FILE"
+
+  # Error! App '258550' state is 0x6 after update job.
+  rm -rf steamapps/*
+
+  # Try to Update
+  /home/steam/steamcmd/steamcmd.sh \
+    +force_install_dir "$(pwd)" \
+    +login anonymous \
+    +app_update 258550 validate \
+    +quit
+
+  cp -a . "$ORIGINAL_DIR"
+
+  rm -f "$UPDATE_LOCK_FILE"
+else
+  while [ -f "$UPDATE_LOCK_FILE" ]; do
+    sleep 1
+  done
+
+  cp -a . "$ORIGINAL_DIR"
+fi
+
 # Run
 
 trap "curl -sS -X POST http://$ADMIN_CONTAINER_NAME:8000/docker/restart" SIGTERM SIGINT

@@ -128,8 +128,6 @@ services:
 
 volumes:
   rust_server_build:
-  # If you have multiple servers. Schedule one wipe, and after all others. `docker volume create rust_server_build`
-    #external: true
 
   server_data:
   server_data_backups:

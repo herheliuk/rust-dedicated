@@ -40,6 +40,8 @@ UPDATE_LOCK_FILE="updating"
 if [ ! -f "$UPDATE_LOCK_FILE" ]; then
   touch "$UPDATE_LOCK_FILE"
 
+  trap 'rm -f "$UPDATE_LOCK_FILE"' SIGTERM SIGINT
+
   # Try to Update
   /home/steam/steamcmd/steamcmd.sh \
     +force_install_dir "$(pwd)" \

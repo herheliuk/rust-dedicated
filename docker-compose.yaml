@@ -133,7 +133,7 @@ volumes:
   rust_server_build:
 
   new_server_build:
-  # for running multiple servers
+  # for running multiple servers; docker volume create new_server_build
     #external: true
 
   server_data:

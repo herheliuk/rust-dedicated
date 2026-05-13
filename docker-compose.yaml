@@ -43,9 +43,6 @@ services:
       - harmony_mods:/home/steam/rustserver/HarmonyMods/
       - harmony_data:/home/steam/rustserver/HarmonyMods_Data/
 
-      # steamcmd fix
-      - steamapps:/home/steam/rustserver/steamapps
-
     ports:
       - $SERVER_PORT:$SERVER_PORT/udp
       - $QUERY_PORT:$QUERY_PORT/udp
@@ -144,5 +141,3 @@ volumes:
 
   caddy_data:
   caddy_config:
-
-  steamapps:

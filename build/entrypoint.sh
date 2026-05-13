@@ -47,21 +47,17 @@ if [ ! -f "$UPDATE_LOCK_FILE" ]; then
     +app_update 258550 validate \
     +quit
 
-  # Error! App '258550' state is 0x6 after update job.
-  rm -rf steamapps/*
-
-  cp -a . "$ORIGINAL_DIR"
-
-  rm -f "$UPDATE_LOCK_FILE"
+  # [Fix] Error! App '258550' state is 0x6 after update job.
+  rm -rf steamapps/* "$UPDATE_LOCK_FILE"
 else
   echo "Waiting for the other container to download the update..."
 
   while [ -f "$UPDATE_LOCK_FILE" ]; do
     sleep 1
   done
-
-  cp -a . "$ORIGINAL_DIR"
 fi
+
+cp -a . "$ORIGINAL_DIR"
 
 cd "$ORIGINAL_DIR"
 

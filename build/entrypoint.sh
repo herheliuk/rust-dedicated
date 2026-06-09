@@ -59,7 +59,7 @@ else
   done
 fi
 
-cp -a . "$ORIGINAL_DIR"
+cp -r . "$ORIGINAL_DIR"
 
 cd "$ORIGINAL_DIR"
 

@@ -5,26 +5,6 @@ services:
 
     # https://wiki.facepunch.com/rust/dns-records
 
-    command: >
-      +server.hostname "CHANGE_ME"
-
-      +server.headerimage "https://CHANGE.ME/server-assets/header_512x256.png"
-      +server.logoimage "https://CHANGE.ME/server-assets/logo_256x256.png"
-
-      +server.description 'CHANGE_ME\n\nCHANGE_ME'
-      +server.url "https://CHANGE.ME"
-
-      +server.tags "monthly,vanilla"
-      +server.premium "false"
-
-      +server.favoritesEndpoint "CHANGE_ME.CHANGE.ME"
-
-      +server.maxplayers 100
-
-      +server.worldsize 4000
-
-      +server.printReportsToConsole true
-
     environment:
       ADMIN_CONTAINER_NAME: $ADMIN_CONTAINER_NAME
       
@@ -42,6 +22,8 @@ services:
       - carbon:/home/steam/rustserver/carbon/
       - harmony_mods:/home/steam/rustserver/HarmonyMods/
       - harmony_data:/home/steam/rustserver/HarmonyMods_Data/
+
+      - ./server.cfg:/home/steam/rustserver/server/my_server_identity/cfg/server.cfg
 
     ports:
       - $SERVER_PORT:$SERVER_PORT/udp
@@ -126,7 +108,7 @@ services:
 volumes:
   new_server_build:
   # for running multiple servers; docker volume create new_server_build
-    #external: true
+    external: true
 
   server_data:
   server_data_backups:

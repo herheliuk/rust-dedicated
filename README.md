@@ -37,12 +37,16 @@ git clone --depth 1 https://github.com/herheliuk/rust-dedicated
 ## Configure
 
 ```
-nano docker-compose.yaml
+nano server.cfg
 nano .env
 nano Caddyfile
 ```
 
 ## First launch
+
+```
+docker volume create new_server_build
+```
 
 ```
 docker compose up -d

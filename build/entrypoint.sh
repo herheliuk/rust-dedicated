@@ -35,12 +35,10 @@ ORIGINAL_DIR="$(pwd)"
 mkdir -p ../new_version
 cd ../new_version
 
-UPDATE_LOCK_FILE="updating"
+LOCKDIR="updating.lock"
 
-if [ ! -f "$UPDATE_LOCK_FILE" ]; then
-  touch "$UPDATE_LOCK_FILE"
-
-  trap 'rm -f "$UPDATE_LOCK_FILE"' SIGTERM SIGINT
+if mkdir "$LOCKDIR" 2>/dev/null; then
+  trap 'rm -rf "$LOCKDIR"' EXIT INT TERM
 
   # Try to Update
   /home/steam/steamcmd/steamcmd.sh \
@@ -50,11 +48,11 @@ if [ ! -f "$UPDATE_LOCK_FILE" ]; then
     +quit
 
   # [Fix] Error! App '258550' state is 0x6 after update job.
-  rm -rf steamapps/* "$UPDATE_LOCK_FILE"
+  rm -rf steamapps/* "$LOCKDIR"
 else
   echo "Waiting for the other container to download the update..."
 
-  while [ -f "$UPDATE_LOCK_FILE" ]; do
+  while [ -d "$LOCKDIR" ]; do
     sleep 1
   done
 fi

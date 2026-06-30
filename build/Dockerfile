@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source="https://github.com/herheliuk/rust-dedicat
 LABEL org.opencontainers.image.authors="Andrii Herheliuk <andrii@herheliuk.com>"
 LABEL org.opencontainers.image.licenses="MIT"
 
-RUN mkdir -p /home/steam/rustserver/server \
+RUN mkdir -p /home/steam/rustserver/server/my_server_identity/cfg \
              /home/steam/rustserver/HarmonyMods \
              /home/steam/rustserver/HarmonyMods_Data \
              /home/steam/new_version

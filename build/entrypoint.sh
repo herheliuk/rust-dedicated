@@ -10,6 +10,13 @@ SERVER_SAVE_FILES_FOLDER=/home/steam/rustserver/server/my_server_identity
 
 mkdir -p "$SERVER_LOGS_FOLDER"
 
+# Delete log files older than 54 days
+find "$SERVER_LOGS_FOLDER" \
+  -type f \
+  -name "*.log" \
+  -mtime +54 \
+  -delete
+
 ln -sf "$SERVER_LOGS_FILE" "$SERVER_LOGS_FOLDER/last.log"
 ln -sf "$SERVER_LOGS_FILE" ./last.log
 

@@ -172,7 +172,7 @@ docker exec -it rust-metrics influx
 
 use db01
 
-CREATE RETENTION POLICY "three_months" ON "db01" DURATION 54d REPLICATION 1 DEFAULT;
+CREATE RETENTION POLICY "two_months" ON "db01" DURATION 54d REPLICATION 1 DEFAULT;
 
 DROP RETENTION POLICY "autogen" ON "db01";
 

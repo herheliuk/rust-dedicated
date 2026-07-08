@@ -162,6 +162,24 @@ Influx Database Password: (see your .env)
 
 Server Tag: (any, e.g. "rs")
 
+> Setup data retention policy on your metrics
+
+This will delete all already stored data!
+
+```
+docker exec -it rust-metrics influx
+```
+
+use db01
+
+CREATE RETENTION POLICY "three_months" ON "db01" DURATION 90d REPLICATION 1 DEFAULT;
+
+DROP RETENTION POLICY "autogen" ON "db01";
+
+SHOW RETENTION POLICIES ON "db01";
+
+exit
+
 ## RCON
 
 ```

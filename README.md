@@ -190,6 +190,8 @@ or use the website you earlier specified in caddy
 
 Note that server admins also can use it in game via F1 or `/cp` (thanks to Carbon).
 
+You can use `find ...` if you don't know what you are looking for.
+
 ## Updates
 
 > NOTE: IT WILL RESTART YOUR SERVER AND YOU MAY NOT BE ABLE TO START IT AGAIN RIGHT AWAY
